@@ -176,17 +176,24 @@ case "$1" in
         #    exit 1
         #fi
         # Save this for later.
+        PIDFILE_CREATE=false
         CMD=$1
         case "$1" in
             start)
                 shift
                 START_OPTION="console"
                 HEART_OPTION="start"
+                if [ "pidfile" == "$2" ]; then
+                    PIDFILE_CREATE=true
+                fi
                 ;;
             start_boot)
                 shift
                 START_OPTION="console_boot"
                 HEART_OPTION="start_boot"
+                if [ "pidfile" == "$3" ]; then
+                    PIDFILE_CREATE=true
+                fi
                 ;;
         esac
         RUN_PARAM="$@"
@@ -203,6 +210,10 @@ case "$1" in
 
         "$BINDIR/run_erl" -daemon "$PIPE_DIR" "$RUNNER_LOG_DIR" \
                           "$(relx_start_command)"
+
+        if "$PIDFILE_CREATE"; then
+           echo "$(relx_get_pid)" > "$RELEASE_ROOT_DIR/$REL_NAME.pid"
+        fi
         ;;
 
     stop)
