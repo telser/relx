@@ -287,7 +287,9 @@ merge_configs([{Key, Value} | CliTerms], ConfigTerms) ->
     end.
 
 parse_vsn(Vsn) when Vsn =:= semver ; Vsn =:= "semver" ->
-    {ok, V} = ec_git_vsn:vsn([]),
-    V;
+    binary_to_list(ec_git_vsn:vsn("*"));
+parse_vsn("semver:" ++ Glob) ->
+    binary_to_list(ec_git_vsn:vsn(Glob));
 parse_vsn(Vsn) ->
+    io:format("parse_vsn ~p~n", [Vsn]),
     Vsn.
