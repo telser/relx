@@ -203,8 +203,6 @@ case "$1" in
 
         "$BINDIR/run_erl" -daemon "$PIPE_DIR" "$RUNNER_LOG_DIR" \
                           "$(relx_start_command)"
-
-        echo "$(relx_get_pid)" > "$RELEASE_ROOT_DIR/$REL_NAME.pid"
         ;;
 
     stop)
